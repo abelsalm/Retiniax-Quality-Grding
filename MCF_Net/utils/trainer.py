@@ -27,6 +27,9 @@ def train_step(train_loader, model, epoch, optimizer, criterion, args):
 
         labels = labels.cuda()
 
+        if labels.dim() == 3:
+            labels = labels.squeeze(1)
+
         out_A, out_B, out_C, out_F, combine = model(imagesA, imagesB, imagesC)
 
         loss_x = criterion(out_A, labels)

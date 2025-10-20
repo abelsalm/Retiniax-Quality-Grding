@@ -15,13 +15,42 @@ def load_eyeQ_excel(data_dir, list_file, n_class=3):
     lb.fit(np.array(range(n_class)))
     df_tmp = pd.read_csv(list_file)
     img_num = len(df_tmp)
+    c = 0
+    c2 = 0
 
     for idx in range(img_num):
         image_name = df_tmp["image"][idx]
-        image_names.append(os.path.join(data_dir, image_name[:-5] + '.png'))
-
         label = lb.transform([int(df_tmp["quality"][idx])])
-        labels.append(label)
+        c2 += 1
+
+        try:
+            # 1. Construction du chemin complet
+            image_name_in_excel = df_tmp["image"][idx]
+            final_image_name = image_name_in_excel[:-5] + '.png'
+            image_path = os.path.join(data_dir, final_image_name)
+
+            # 2. Vérification de l'existence du fichier sur le disque
+            if os.path.exists(image_path):
+
+                # 3. Traitement des données si le fichier existe
+                image_names.append(image_path)
+                
+                label = lb.transform([int(df_tmp["quality"][idx])])
+                labels.append(label)
+
+                # Incrémentation du compteur et affichage
+                c += 1
+
+            if c2 % 1000 == 0:
+                print('counter at :', c)
+                print('counter 2 at :', c2)
+                print('ratio loaded', c/c2)
+                print(image_path)
+            
+
+        except Exception as e:
+            print('failed to load at count : ', c)
+            print(f"   - CHemin de l'image supposé : {df_tmp['image'][idx]}")
 
     return image_names, labels
 

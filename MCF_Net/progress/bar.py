@@ -18,7 +18,7 @@ from __future__ import unicode_literals
 
 import sys
 
-from . import Progress
+from progress import Progress
 
 
 class Bar(Progress):
