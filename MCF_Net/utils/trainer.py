@@ -68,6 +68,8 @@ def validation_step(val_loader, model, criterion):
     epoch_loss = 0
     iters_per_epoch = len(val_loader)
     bar = Bar('Processing {}'.format('validation'), max=iters_per_epoch)
+    '''for step, (a, b, c) in enumerate(val_loader):
+        print(a.shape, b.shape, c.shape)'''
 
     for step, (imagesA, imagesB, imagesC, labels) in enumerate(val_loader):
         start_time = time.time()
@@ -76,6 +78,10 @@ def validation_step(val_loader, model, criterion):
         imagesB = imagesB.cuda()
         imagesC = imagesC.cuda()
         labels = labels.cuda()
+
+        if labels.dim() == 3:
+            labels = labels.squeeze(1)
+
 
         _, _, _, _, outputs = model(imagesA, imagesB, imagesC)
         with torch.no_grad():

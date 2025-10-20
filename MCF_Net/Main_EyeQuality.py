@@ -89,7 +89,7 @@ train_loader = torch.utils.data.DataLoader(dataset=data_train, batch_size=args.b
                                                shuffle=True, num_workers=4, pin_memory=True)
 
 data_val = DatasetGenerator(data_dir=test_images_dir, list_file=val_file, transform1=transform_list_val1,
-                             transform2=transformList2, n_class=args.n_classes, set_name='test')
+                             transform2=transformList2, n_class=args.n_classes, set_name='train')
 # changing test to val loader here 
 val_loader = torch.utils.data.DataLoader(dataset=data_val, batch_size=args.batch_size,
                                           shuffle=False, num_workers=4, pin_memory=True)
@@ -105,9 +105,9 @@ for epoch in range(0, args.epochs):
     if best_metric > validation_loss:
         best_metric = validation_loss
         best_iter = epoch
-        model_save_file = os.path.join(args.save_dir, args.save_model + '.tar')
-        if not os.path.exists(args.save_dir):
-            os.makedirs(args.save_dir)
+        model_save_file = os.path.join('/workspace/Retiniax-Quality-Grding/MCF_Net/result', args.save_model + '.tar')
+        if not os.path.exists('/workspace/Retiniax-Quality-Grding/MCF_Net/result'):
+            os.makedirs('/workspace/Retiniax-Quality-Grding/MCF_Net/result')
         torch.save({'state_dict': model.state_dict(), 'best_loss': best_metric}, model_save_file)
         print('Model saved to %s' % model_save_file)
 
